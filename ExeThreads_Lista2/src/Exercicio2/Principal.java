@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 
 public class Principal {
     
-    public static int cont = 0;
+    public static int posicaoChegada = 0;
     
     public static Scanner s = new Scanner(System.in);
     public static Random r =  new Random();
@@ -44,7 +44,7 @@ public class Principal {
     }
     
     public static synchronized void testeGanhador(int idCavalo){
-        cont++;
-        System.out.println("Cavalo "+ idCavalo+ " em "+cont+"º lugar!" );
+        posicaoChegada++;
+        System.out.println("Cavalo "+ idCavalo+ " em "+posicaoChegada+"º lugar!" );
     }
 }

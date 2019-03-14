@@ -3,7 +3,7 @@ package Exercicio2;
 
 public class Cavalo extends Thread {
     int tamPercurso;
-    int     i =0;
+    int i =0;
     
     public Cavalo(int tamPercurso){
         this.tamPercurso = tamPercurso;

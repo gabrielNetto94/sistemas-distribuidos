@@ -1,23 +1,31 @@
-
 package Exercicio3;
+import java.util.Random;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+public class MyThread extends Thread {
 
-public class MyThread extends Thread{    
     int id;
-    private final Object Thread;
     
-    public MyThread(Object Thread){
-        
-        this.Thread = Thread;
+    public MyThread(int id) {
+        this.id = id;
     }
+    
+    MyThread ProxThread;
+
     @Override
-    public void run(){
-        try {
-            Thread.wait();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MyThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void run() {
+        System.out.println("Meu id: " + id + " Id ProxThread: " + ProxThread.id);
+        
+        while (ProxThread.bool() == false) {
+            try {
+                sleep(100);
+            } catch (InterruptedException ex) {
+                
+            }   
+        }       
+    }
+
+    public static synchronized boolean bool() {
+        Random r = new Random();
+        return r.nextBoolean();
     }
 }
