@@ -1,14 +1,11 @@
 /*
 Com base no estudo de caso da aplicação de desenho compartilhado desenvolvida durante a aula, realize mudanças de modo que:
-a) Os clientes enviem para o servidor a própria imagem (BufferedImage) ao invés de enviar somente os pontos que estão desenhando;
+a) Os clientes enviem para o servidor a própria PontosImagem (BufferedImage) ao invés de enviar somente os pontos que estão desenhando;
 b) O servidor, de alguma forma, precisará realizar um "merge" das imagens dos clientes...
-c) Seja possível que um cliente, ao entrar no chat, receba a imagem que foi desenhada por clientes que já estavam no chat anteriormente;
+c) Seja possível que um cliente, ao entrar no chat, receba a PontosImagem que foi desenhada por clientes que já estavam no chat anteriormente;
 
-Mensagens que o cliente recebe
-a)Mensagem contendo uma lista de pontos
-"PONTOS:xxx;yyy;rrr;ggg;bbb_xxx;yyy;rrr;ggg;bbb_xxx;yyy;rrr;ggg;bbb_xxx;yyy;rrr;ggg;bbb_..."
  */
-package aulaudp;
+package Desafio;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -29,7 +26,7 @@ public class Principal extends javax.swing.JFrame {
     Graphics2D g;
     DatagramSocket socket = null;
 
-    ArrayList<String> imagem = new ArrayList<>();
+    ArrayList<String> PontosImagem = new ArrayList<>();
 
     public Principal() {
         initComponents();
@@ -42,7 +39,7 @@ public class Principal extends javax.swing.JFrame {
         jLblImagem.setIcon(icon);
 
         pedeAdicionar();
-        criaThread();
+        tRecebeDados();
     }
 
     public void enviaMensagem(String msg) {
@@ -59,6 +56,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    //envia mensagem para o servidor, para ser adicionado na lista de clientes do Servidor
     public void pedeAdicionar() {
         try {
             socket = new DatagramSocket();
@@ -68,8 +66,8 @@ public class Principal extends javax.swing.JFrame {
         enviaMensagem("ADICIONA");
     }
 
-    //receber dados do servidor
-    public void criaThread() {
+    //receber dados do servidor, splita a mensagem e bota na tela os pontos
+    public void tRecebeDados() {
         new Thread() {
             public void run() {
                 while (true) {
@@ -90,8 +88,11 @@ public class Principal extends javax.swing.JFrame {
                                 int green = Integer.parseInt(pontoPartes[3]);
                                 int blue = Integer.parseInt(pontoPartes[4]);
                                 Color cor = new Color(red, green, blue);
+                                //seta a cor do ponto
                                 g.setColor(cor);
+                                //"escreve" o pixel na tela
                                 g.fillOval(x, y, 10, 10);
+                                
                             }
                             repaint();
                         }
@@ -110,7 +111,7 @@ public class Principal extends javax.swing.JFrame {
 
         jLblImagem = new javax.swing.JLabel();
         jcc = new javax.swing.JColorChooser();
-        jButton1 = new javax.swing.JButton();
+        jBEnviaMensagem = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,10 +123,10 @@ public class Principal extends javax.swing.JFrame {
 
         jcc.setColor(java.awt.Color.black);
 
-        jButton1.setText("Enviar imagem");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jBEnviaMensagem.setText("Enviar imagem");
+        jBEnviaMensagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jBEnviaMensagemActionPerformed(evt);
             }
         });
 
@@ -141,7 +142,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(jButton1)
+                .addComponent(jBEnviaMensagem)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -152,7 +153,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jcc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLblImagem))
                 .addGap(28, 28, 28)
-                .addComponent(jButton1)
+                .addComponent(jBEnviaMensagem)
                 .addContainerGap(175, Short.MAX_VALUE))
         );
 
@@ -167,22 +168,22 @@ public class Principal extends javax.swing.JFrame {
         repaint();
 
         String msg = "PONTO:" + evt.getX() + ";" + evt.getY() + ";" + cor.getRed() + ";" + cor.getGreen() + ";" + cor.getBlue();
-        //adiciona cada ponto em uma lista e, ao clicar no botão enviar imagem, envia a lista contendo todos os pontos para o servidor
-        imagem.add(msg);
-
+        //adiciona cada ponto em uma lista, e ao clicar no botão enviar PontosImagem, envia a lista contendo todos os pontos para o servidor
+        PontosImagem.add(msg);
+        
         System.out.println(msg);
         //enviaMensagem(msg);
     }//GEN-LAST:event_jLblImagemMouseDragged
 
     //envia a lista para o servidor
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jBEnviaMensagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEnviaMensagemActionPerformed
 
         //percorrer a lista e envia para o servidor as coordenadas
-        for (int i = 0; i < imagem.size(); i++) {
-            enviaMensagem(imagem.get(i));
+        for (int i = 0; i < PontosImagem.size(); i++) {
+            enviaMensagem(PontosImagem.get(i));
         }
-        System.out.println("TAMANHO DA LISTA"+imagem.size());
-    }//GEN-LAST:event_jButton1ActionPerformed
+        System.out.println("TAMANHO DA LISTA"+PontosImagem.size());
+    }//GEN-LAST:event_jBEnviaMensagemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,7 +221,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jBEnviaMensagem;
     private javax.swing.JLabel jLblImagem;
     private javax.swing.JColorChooser jcc;
     // End of variables declaration//GEN-END:variables

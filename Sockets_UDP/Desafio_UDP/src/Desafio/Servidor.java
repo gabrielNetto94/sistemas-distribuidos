@@ -1,17 +1,4 @@
-
-/*
-Mensagens que o servidor recebe
-a)Mensagem de identificação do cliente
-"ADICIONA"
-
-b)Mensagem com um ponto a ser desenhado
-"PONTO:xxx;yyy;rrr;ggg;bbb"
-
-Servidor:
-    - lista de clientes (ip, porta)
-    - lista de pontos
- */
-package aulaudp;
+package Desafio;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -36,13 +23,14 @@ public class Servidor {
 
         int x, y;
         Color cor;
+        
     }
 
     ArrayList<Cliente> listaClientes = new ArrayList<>();
-    ArrayList<Ponto> listaPontos = new ArrayList<>();
+    ArrayList<Ponto> listaPontos = new ArrayList<>();    
     DatagramSocket socket;
 
-    public void criaThread() {
+    public void tEnviaDados() {
         new Thread() {
             public void run() {
                 while (true) {
@@ -76,13 +64,13 @@ public class Servidor {
             }
         }.start();
     }
-
+   
     public Servidor() {
         try {
             //cria o socket udp
             socket = new DatagramSocket(1234, InetAddress.getByName("localhost"));
             //cria uma thread para enviar a listaPontos para todos os clientes a cada x segundos
-            criaThread();
+            tEnviaDados();
             while (true) {
                 //cria um pacote para receber mensagem
                 byte buffer[] = new byte[30];
