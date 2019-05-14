@@ -1,0 +1,8 @@
+2- Desenvolva uma aplicação RMI em que o servidor implemente um conversor de moedas, entre real, euro e dolar de acordo com a cotação do dia de hoje. Além disso, implemente a aplicação cliente que utilize o serviço, apresentando um menu para o usuário escolher a moeda que ele deseja vender, a moeda que deseja comprar e a quantidade.
+
+3- Desenvolva uma aplicação RMI para um Banco. Ou seja, o servidor deverá implementar um objeto remoto contendo uma variável que armazenará o saldo de uma conta, e também deverá implementar métodos para depositar, sacar e verificar o saldo.
+
+4- Desenvolva uma aplicação RMI para um servidor de arquivos, que implemente as seguintes funções:
+	Leitura do arquivo inteiro ou de uma linha específica do arquivo, esta passada por parâmetro;
+	Escrita no arquivo no modo append, ou seja, adiciona-se informações sempre ao final do arquivo, e caso o mesmo não exista, ele é criado;
+	Exclusão do arquivo.
