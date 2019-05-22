@@ -1,15 +1,15 @@
 package Lista2_chatRmi;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 
-/**
- *
- * @author usrlab01
- */
-public interface IMetodosCliente {
+/*
+Descreve os métodos que o servidor pode invocar nos clientes
+*/
+public interface IMetodosCliente extends Remote{
     
+    public void recebeMensagem(String mensagem) throws RemoteException;
+    public void atualizaCliente(ArrayList listaConectados) throws RemoteException;
+       
 }
