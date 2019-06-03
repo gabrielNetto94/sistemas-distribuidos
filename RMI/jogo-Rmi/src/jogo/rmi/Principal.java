@@ -12,13 +12,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javafx.application.Platform.exit;
 import javax.swing.JOptionPane;
 
 public class Principal extends javax.swing.JFrame {
 
     String ESPACO = " ";
-    int LIN = 15, COL = 35;    
+    int LIN = 15, COL = 35;
 
     int matriz[][];
 
@@ -26,6 +25,8 @@ public class Principal extends javax.swing.JFrame {
 
     IServidor ref;
     Cliente cli;
+
+    public int moeda, linha, coluna;
 
     class Cliente extends UnicastRemoteObject implements ICliente {
 
@@ -35,7 +36,7 @@ public class Principal extends javax.swing.JFrame {
 
         @Override
         public void recebePosicao(int linha, int coluna, int codigo) throws RemoteException {
-          System.out.println("Cliente recebeu atualização: " + codigo + ", " + linha + ", " + coluna);
+            System.out.println("Cliente recebeu atualização: " + codigo + ", " + linha + ", " + coluna);
             //retira o codigo da matriz
             for (int i = 0; i < LIN; i++) {
                 for (int j = 0; j < COL; j++) {
@@ -67,33 +68,31 @@ public class Principal extends javax.swing.JFrame {
             jLNumero.setText(" ");
             jLNumero.setText(Integer.toString(numJogadores));
         }
-    
+
     }
 
     public Principal() {
         initComponents();
         matriz = new int[LIN][COL];
         limpaMatriz();//zera a matriz
-        if(!registraNoServidor()){//registra no servidor e obtem um código
-            JOptionPane.showMessageDialog(null,"Não foi possível logar! \nMotivo: número máximo de jogadores são 10");
+        if (!registraNoServidor()) {//registra no servidor e obtem um código
+            JOptionPane.showMessageDialog(null, "Não foi possível logar! \nMotivo: número máximo de jogadores são 10");
             System.exit(0);
-        }else{
+        } else {
             geraPosicaoInicial(); //gera uma posição inicial aleatória para o cliente
             atualizaTextArea();//atualiza o textarea com os valores da matriz
         }
-        
-        
+
     }
-     
+
     public boolean registraNoServidor() {
         try {
             ref = (IServidor) Naming.lookup("rmi://localhost/Servidor");
             cli = new Cliente();
             meu_codigo = ref.registraCliente(cli);
-            
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
             //se retornar -1 não deve deixar o cliente jogar 
-            if(meu_codigo == -1){
+            if (meu_codigo == -1) {
                 return false;
             }
             System.out.println("Meu código é " + meu_codigo);
@@ -104,10 +103,10 @@ public class Principal extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return true;
     }
-    
+
     public void geraPosicaoInicial() {
 
         try {
@@ -115,21 +114,21 @@ public class Principal extends javax.swing.JFrame {
                 Random r = new Random();
                 minha_linha = r.nextInt(LIN);
                 minha_coluna = r.nextInt(COL);
-                
-                System.out.println("C: "+meu_codigo+" L: "+minha_linha+" C: "+minha_coluna);
-                
+
+                System.out.println("C: " + meu_codigo + " L: " + minha_linha + " C: " + minha_coluna);
+
             } while (!ref.posicaoValida(minha_linha, minha_coluna));
-            
+
             System.out.println("Posição validada, enviando posição para o servidor!");
-            
+
             ref.enviaPosicao(minha_linha, minha_coluna, meu_codigo);
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-       
+
     void limpaMatriz() {
         for (int i = 0; i < LIN; i++) {
             for (int j = 0; j < COL; j++) {
@@ -142,18 +141,21 @@ public class Principal extends javax.swing.JFrame {
         jTAJogo.setText("");
         for (int i = 0; i < LIN; i++) {
             for (int j = 0; j < COL; j++) {
-                if (matriz[i][j] == 0) {
-                    jTAJogo.append(ESPACO);
-                } else {
-                    jTAJogo.append(matriz[i][j] + "");
+                switch (matriz[i][j]) {
+                    case 0:
+                        jTAJogo.append(ESPACO);
+                        break;
+                    case 11:
+                        jTAJogo.append("@ ");
+                        break;
+                    default:
+                        jTAJogo.append(matriz[i][j] + "");
+                        break;
                 }
             }
             jTAJogo.append("\n");
         }
     }
-
-
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -221,44 +223,43 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void enviaPosicao(int linha, int coluna, int codigo) {
+            try {
+                ref.enviaPosicao(linha, coluna, codigo);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }
+
     private void jTAJogoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTAJogoKeyPressed
-        if (evt.getKeyCode() == VK_RIGHT) {
-            if (minha_coluna + 1 < COL) {
-                minha_coluna++;
-                try {
-                    ref.enviaPosicao(minha_linha, minha_coluna, meu_codigo);
-                } catch (RemoteException ex) {
-
+        switch (evt.getKeyCode()) {
+            case VK_RIGHT:
+                if (minha_coluna + 1 < COL) {
+                    minha_coluna++;
+                    enviaPosicao(minha_linha, minha_coluna, meu_codigo);
                 }
-            }
-        } else if (evt.getKeyCode() == VK_LEFT) {
-
-            if (minha_coluna - 1 >= 0) {
-                minha_coluna--;
-                try {
-                    ref.enviaPosicao(minha_linha, minha_coluna, meu_codigo);
-                } catch (RemoteException ex) {
-
+                break;
+            case VK_LEFT:
+                if (minha_coluna - 1 >= 0) {
+                    minha_coluna--;
+                    enviaPosicao(minha_linha, minha_coluna, meu_codigo);
                 }
-            }
-        } else if (evt.getKeyCode() == VK_UP) {
-            if (minha_linha - 1 >= 0) {
-                minha_linha--;
-                try {
-                    ref.enviaPosicao(minha_linha, minha_coluna, meu_codigo);
-                } catch (RemoteException ex) {
-
+                break;
+            case VK_UP:
+                if (minha_linha - 1 >= 0) {
+                    minha_linha--;
+                    enviaPosicao(minha_linha, minha_coluna, meu_codigo);
                 }
-            }
-        } else if (evt.getKeyCode() == VK_DOWN) {
-            if (minha_linha + 1 < LIN) {
-                minha_linha++;
-                try {
-                    ref.enviaPosicao(minha_linha, minha_coluna, meu_codigo);
-                } catch (RemoteException ex) {
-
+                break;
+            case VK_DOWN:
+                if (minha_linha + 1 < LIN) {
+                    minha_linha++;
+                    enviaPosicao(minha_linha, minha_coluna, meu_codigo);
                 }
-            }
+                break;
+            default:
+                break;
         }
 
         System.out.println(minha_linha + ", " + minha_coluna);

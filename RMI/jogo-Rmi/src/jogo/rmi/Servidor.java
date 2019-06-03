@@ -8,6 +8,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +20,23 @@ public class Servidor extends UnicastRemoteObject implements IServidor {
     ArrayList<ClientePosicao> listaPosicoes = new ArrayList<>();
 
     public Servidor() throws RemoteException {
-   
+        new Thread() {
+
+            @Override
+            public void run() {
+                while (true) {
+
+                    try {
+                        Thread.sleep(3000);
+                        gerarMoeda();                        
+
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+        }.start();
     }
 
     @Override
@@ -28,7 +45,7 @@ public class Servidor extends UnicastRemoteObject implements IServidor {
         ClientePosicao cliTemp;
 
         listaClientes.remove(cli);
-        
+
         for (ClientePosicao p : listaPosicoes) {
             if (p.codigo == codigo) {
                 cliTemp = p;
@@ -43,23 +60,26 @@ public class Servidor extends UnicastRemoteObject implements IServidor {
 
     @Override
     public int registraCliente(ICliente cli) throws RemoteException {
-        
-        if(listaClientes.size() < maxJogadoresAtivos){
+
+        if (listaClientes.size() < maxJogadoresAtivos) {
             listaClientes.add(cli);
-        }else{
+        } else {
             return -1;
         }
-        
+
         for (ClientePosicao p2 : listaPosicoes) {
             cli.recebePosicao(p2.linha, p2.coluna, p2.codigo);
         }
         ClientePosicao p = new ClientePosicao();
         codigoAtual++;
         p.codigo = codigoAtual;
+        //se não setar um valor o JAVA coloca como 0
+        p.coluna = -1;
+        p.linha = -1;
         listaPosicoes.add(p);
 
         enviaNumJogadores();
-        
+
         return p.codigo;
 
     }
@@ -83,11 +103,6 @@ public class Servidor extends UnicastRemoteObject implements IServidor {
 
     @Override
     public boolean posicaoValida(int linha, int coluna) throws RemoteException {
-        //teste ini
-            for (ClientePosicao c : listaPosicoes) {
-                System.out.println(c.codigo + " / " + c.linha + " / " + c.coluna);
-            }
-        //teste fim
 
         for (ClientePosicao posicao : listaPosicoes) {
             if (posicao.linha == linha && posicao.coluna == coluna) {
@@ -96,6 +111,46 @@ public class Servidor extends UnicastRemoteObject implements IServidor {
         }
 
         return true;
+    }
+
+    public void gerarMoeda() {
+        
+        try {
+            //remove da lista para adicionar outra posicao
+//            for (ClientePosicao p : listaPosicoes) {
+//                if (p.codigo == 11) {
+//                    System.out.println("Removendo moeda");
+//                    listaPosicoes.remove(p);
+//                }
+//            }
+
+            Random r = new Random();
+            ClientePosicao cli = new ClientePosicao();
+            cli.codigo = 11;
+
+            do {
+                cli.linha = r.nextInt(15);
+                cli.coluna = r.nextInt(35);
+            } while (!posicaoValida(cli.linha, cli.coluna));
+
+            System.out.println("Add moeda na lista");
+            listaPosicoes.add(cli);
+
+            System.out.println("envia posicao da moeda para clientes");
+            enviaPosicao(cli.linha, cli.coluna, cli.codigo);
+
+//            try {
+//                while (!posicaoValida(cli.linha, cli.coluna)) {
+//                    cli.linha = r.nextInt(15);
+//                    cli.coluna = r.nextInt(35);
+//                }
+//            } catch (RemoteException ex) {
+//                Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void enviaNumJogadores() {
