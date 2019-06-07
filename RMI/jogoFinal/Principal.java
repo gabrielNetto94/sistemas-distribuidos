@@ -1,4 +1,4 @@
-package jogo.rmi;
+package jogoFinal;
 
 import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_LEFT;
@@ -67,6 +67,11 @@ public class Principal extends javax.swing.JFrame {
         public void atualizaJogadores(int numJogadores) throws RemoteException {
             jLNumero.setText(" ");
             jLNumero.setText(Integer.toString(numJogadores));
+        }
+
+        @Override
+        public void updateTextArea(int codigo) throws RemoteException {
+            liberaPosicao(codigo);
         }
 
     }
@@ -224,12 +229,12 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void enviaPosicao(int linha, int coluna, int codigo) {
-            try {
-                ref.enviaPosicao(linha, coluna, codigo);
-            } catch (RemoteException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            ref.enviaPosicao(linha, coluna, codigo);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     private void jTAJogoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTAJogoKeyPressed

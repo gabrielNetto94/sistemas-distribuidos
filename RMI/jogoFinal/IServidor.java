@@ -1,4 +1,4 @@
-package jogo.rmi;
+package jogoFinal;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
