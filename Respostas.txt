@@ -1,0 +1,37 @@
+1. De acordo com as várias definições, como você definiria um Sistema Distribuído?
+Um sistema distribuído é basicamente um sistema capaz de se comunicar entre máquinas ou sistemas.
+
+2. Quais as vantagens de se utilizar um SD?
+Compartilhamento de recursos, balanceamento de carga, acesso a serviços sem restrição de localização.
+
+3. Em quais aspectos um SD pode ser heterogêneo?
+Um SD pode ser heterogêneo, por usar sistemas operacionais diferentes, linguagens de programação diferentes ou hardwares.
+
+4. Que tipos de soluções temos em relação a heterogeneidade?
+Middleware, uma camada de software entre a aplicação distribuída e o sistema operacional que, teoricamente interligaria o sistema distribuído.
+
+5. O que você entende por Abertura e Interfaces em SD?
+É a capacidade de isolar ao máximo um sistema, de maneira que se ocorre um problema ou é necessário reimplementar um método, todo o restante do sistema não para de funcionar.
+
+6. Quais são os tipos de problemas de escalabilidade existentes em SD?
+Controle de custos de recursos físicos
+Controle do desempenho da aplicação
+Esgotamento de recursos
+Evitar gargalos na performance sistema
+
+7. Cite e explique os principais tipos de Sistemas Distribuídos.
+Sistemas de computação
+Cluster - consiste em diversos computadores com o mesmo hardware e sistema operacional executando determinada tarefa, se um desses computadores (nó) falhar os outros assumem o a sua tarefa.
+
+Computação em Grade- Diferente do Cluster, as máquinas podem possuir hardware e SO diferentes, e pertencem não necessariamente à um domínio administrativo, como por exemplo a rede de computadores da UFN, seja máquina de laboratório ou administrativo.
+
+Sistemas de informação
+
+Servidor de banco de dados- aplicação cliente - servidor, os clientes enviam requisições ao servidor para executar determinadas operações.
+
+Sistemas Pervasivos
+Dispositivos de computação móvel - Exemplo clássico são smartphones, aparelhos pequenos, alimentados por baterias, conexão sem fio (wi=fi, bluetooth, IR).
+
+Sistemas domésticos - compostos por computadores pessoais, celulares, TV'S, videogames, etc.
+
+Sistemas eletrônicas para tratamento de saúde: servem para monitorar o bem-estar de pessoas .

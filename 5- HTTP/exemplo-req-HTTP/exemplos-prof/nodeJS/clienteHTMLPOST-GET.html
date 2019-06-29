@@ -1,0 +1,32 @@
+<html>
+	
+	<title>HTML_POST</title>
+	<style>
+	body{
+		background-color:blanchedalmond;
+	}
+	</style>
+	<body>
+		<h1>Formulário POST</h1><br>
+		<form action="http://localhost:3000" method="POST">	
+			Login:<input type="text" name="parametro1"/>
+			<br>
+			Senha:<input type="password" name="parametro2"/>
+			<br>
+			<input type="submit" value="Enviar" />
+		
+		</form> 
+
+		<h1>Formulário GET</h1><br>
+		
+		<form action="http://localhost:3000/login" method="GET">
+			Login:<input type="text" name="name"/>
+			<br/>
+			Senha:<input type="password" name="password"/>
+			<br/>
+			<input type="submit" value="Enviar" />
+		</form>
+
+	</body>
+
+</html>

@@ -11,23 +11,18 @@ import java.util.logging.Logger;
 
 public class Principal {
 
-    public Principal() {
+    boolean flag = true;
 
-    }
-    public static boolean livre = true;
-
-    public static void main(String[] args) {
-
+    public void iniciar() {
         //cria 5 processos que solicitarão ao coordenador permissão para executar
         Thread t1 = new Thread() {
             public void run() {
-                int numThreads = 5;
+                int numThreads = 10;
                 MyThread thread[] = new MyThread[numThreads];
-                
+
                 for (int i = 0; i < numThreads; i++) {
                     thread[i] = new MyThread();
                     thread[i].start();
-                    System.out.println("thread " + i + " criada");
                 }
             }
         };
@@ -43,42 +38,44 @@ public class Principal {
 
             while (true) {
                 Socket cliente = servidor.accept();//bloqueante
-
                 listaClientes.add(cliente);
-                int var =0;
+                
+                int var = 0;
                 Thread t = new Thread() {
-                    public synchronized void run() {
+                    public void run() {
                         while (true) {
                             try {
 
                                 DataOutputStream out = new DataOutputStream(cliente.getOutputStream());
                                 DataInputStream in = new DataInputStream(cliente.getInputStream());
-                                
-                                
-                                out.writeInt(teste(var));
-                                
-//                                String msg = in.readUTF();
-//                                if (msg.equals("permissao")) {
-//                                    if (!livre) {
-//                                        System.out.println("permissao negada "+cliente.getPort());
-//                                    }
-//                                    if (livre) {
-//                                        System.out.println("permissao concedida "+cliente.getPort());
-//                                        out.writeBoolean(true);
-//                                        livre = false;
-//                                    }
-//
-//                                }
-//                                if (msg.equals("libera")) {
-//                                    if (!fila.isEmpty()) {
-//                                        livre = true;
-////                                        Socket c = fila.getFirst();
-////                                        fila.removeFirst();
-//
-//                                    }
-//
-//                                }
 
+                                String msg = in.readUTF();
+                                if (msg.equals("permissao")) {
+                                    if (!flag) {
+                                        System.out.println("Permissao negada " + cliente.getPort());
+                                        fila.add(cliente);
+                                    }
+                                    if (flag) {
+                                        System.out.println("Permissao concedida " + cliente.getPort());
+                                        out.writeBoolean(true);
+                                        flag = false;
+                                    }
+
+                                }
+                                if (msg.equals("libera")) {
+                                    System.out.println("Thread " + cliente.getPort()+" liberou");
+                                    if (!fila.isEmpty()) {
+                                        flag = true;
+                                        Socket c = fila.getFirst();
+                                        System.out.println("Thread "+c.getPort()+" vai ser liberada");
+                                        fila.removeFirst();
+                                        DataOutputStream out2 = new DataOutputStream(c.getOutputStream());
+                                        out.writeBoolean(true);
+                                        flag = false;
+                                        
+
+                                    }
+                                }
                             } catch (IOException ex) {
                                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -94,11 +91,10 @@ public class Principal {
             System.out.println("Erro na criação do servidor");
             ex.printStackTrace();
         }
-
     }
 
-    synchronized public static int teste(int i){
-        i++;
-        return i;
+    public static void main(String[] args) {
+        Principal p = new Principal();
+        p.iniciar();
     }
 }

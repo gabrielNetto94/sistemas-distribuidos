@@ -1,0 +1,17 @@
+{
+  "name": "teste-node",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "fs": "0.0.1-security"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

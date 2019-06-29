@@ -1,0 +1,21 @@
+1 – Qual a diferença entre processos e threads?
+
+Processo - é a execução do programa em sí, competindo com outros processos do sistema operacional e não compartilhando recursos de memória.
+Threads - são subprocessos que compartilham regiões de memória e que fazem parte de um processo.
+
+2 – Que modificações precisamos realizar em uma classe na linguagem Java para que ela se torne uma thread?
+
+É necessário herdar da classe Thread e utilizar o método start para iniciar a thread
+
+3 – Responda em quais estados (de acordo com o penúltimo slide) uma thread se encontra nos casos abaixo:
+
+a) Quando instanciamos a thread;
+	NOVO
+b) Quando chamamos o método “start()”
+	PRONTO
+c) Quando o “run()” começa a executar
+	EXECUTANDO
+d) Quando a thread decide gravar alguma informação em um arquivo
+	BLOQUEADO
+e) Quando a thread termina de executar o “run()”.
+	SAÍDA

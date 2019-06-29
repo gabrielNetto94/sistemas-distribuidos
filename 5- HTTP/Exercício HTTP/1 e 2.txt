@@ -1,0 +1,14 @@
+1- A principal diferença entre os métodos e é visualmente notável, é que no método GET a requisição é enviada junto com a url, não podendo ultrapassar o limite de 255 caracteres, caso ultrapasse será necesário envia a requisição via POST, que não tem limite de caracter.
+Outra diferença entre os métodos é que o método GET é um pouco mais rápido que o POST, pois no POST é necessária encapsular a mensagem que será enviada via HTTP.
+
+2- PUT - O método PUT substitui todas as atuais representações do recurso de destino pela carga de dados da requisição.
+
+DELETE - O método DELETE remove um recurso específico.
+
+CONNECT - O método CONNECT estabelece um túnel para o servidor identificado pelo recurso de destino.
+
+OPTIONS - O método OPTIONS é usado para descrever as opções de comunicação com o recurso de destino.
+
+TRACE - O método TRACE executa um teste de chamada loop-back junto com o caminho para o recurso de destino.
+
+PATCH- O método PATCH é utilizado para aplicar modificações parciais em um recurs

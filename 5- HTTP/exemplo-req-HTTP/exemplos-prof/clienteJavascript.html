@@ -1,0 +1,43 @@
+<html>
+    <body>    
+        <script>
+
+            /*
+            Requisição via GET
+            */
+            var xmlHttpGet = new XMLHttpRequest();
+            xmlHttpGet.open( "GET", "http://localhost:8000/exemplo?parametro1=5&parametro2=10", true ); // false for assynchronous request
+            xmlHttpGet.send();
+            xmlHttpGet.addEventListener("readystatechange", processRequestGet, false);
+
+            /*
+            Requisição via POST
+            */
+            var xmlHttpPost = new XMLHttpRequest();
+            xmlHttpPost.open( "POST", "http://localhost:8000/exemplo", true ); // false for assynchronous request
+            xmlHttpPost.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlHttpPost.send("parametro1=5&parametro2=10");
+            xmlHttpPost.addEventListener("readystatechange", processRequestPost, false);
+
+            /*
+            Função que processa a requisição
+            */
+            function processRequestGet(e) {
+                if (xmlHttpGet.readyState == 4 && xmlHttpGet.status == 200) {
+                    var response = xmlHttpGet.responseText;
+                    alert(response);
+                }
+            }
+
+            /*
+            Função que processa a requisição
+            */
+            function processRequestPost(e) {
+                if (xmlHttpPost.readyState == 4 && xmlHttpPost.status == 200) {
+                    var response = xmlHttpPost.responseText;
+                    alert(response);
+                }
+            }
+        </script>
+    <body>
+</html>

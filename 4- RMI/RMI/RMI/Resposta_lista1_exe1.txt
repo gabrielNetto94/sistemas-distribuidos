@@ -1,0 +1,4 @@
+1- Se você fosse separar cliente e servidor de uma aplicação RMI em projetos separados, que arquivos deverão estar em cada projeto para que a aplicação possa ser executada por ambos?
+
+No servidor deverá ter os arquivos de interface, classe com os métodos e a implementação do servidor.
+No cliente deverá ter a classe com a implementação do cliente e a interface com os métodos do servidor.
