@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
     console.log('GET\nNome: ' + req.query.name + ' \nPassword: ' + req.query.password);
     res.sendFile(path.join(__dirname + '/index.html'));
     //return res.json(req.query.name+'asdas'+req.query.password);
+    
 });
 
 app.get('/login', (req, res) => {
