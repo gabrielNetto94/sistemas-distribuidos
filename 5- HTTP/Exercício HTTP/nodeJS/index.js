@@ -1,9 +1,15 @@
 
 const http = require('http')
 const express = require('express');
+var bodyParser = require('body-parser')
 var path = require('path');
 const app = express();
 const server = require('http').Server(app);
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 var auth = ['adminsitrador', '12346'];
 
@@ -15,11 +21,7 @@ app.get('/', (req, res) => {
     
 });
 
-app.get('/login', (req, res) => {
-
-    // auth.find(req.query.name);
-    // auth.map('123456');
-
+app.get('/login', (req, res) => {    
     if (req.query.name === 'a' && req.query.password === 'a') {
         res.sendFile(path.join(__dirname + '/welcome.html'));
     } else {
@@ -28,9 +30,11 @@ app.get('/login', (req, res) => {
 
 });
 
-app.post('/', (req, res) => {
-    console.log('POST\nNome: ' + req.query.name + ' \nPassword: ' +  req.query.password);
-    //return res.end('teste');
+
+app.post('/login', (req, res) => {
+    console.log('gugu > POST\nNome: ' + req.body.login + ' \nPassword: ' +  req.body.password);
+    res.sendFile(path.join(__dirname + '/welcome.html'),{ login: 'tobi' });
+    
 });
 
 
