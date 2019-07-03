@@ -1,13 +1,18 @@
+const http = require('http') //requisição via http
+const express = require('express');//usado para criar servidor
+var path = require('path');//para trabalhar com diretórios
 
-const http = require('http')
-const express = require('express');
-var path = require('path');
-const app = express();
+const app = express(); //instância o servidor express
+const myParser = require("body-parser"); //parsear mesagens
 const server = require('http').Server(app);
 
-var auth = ['adminsitrador', '12346'];
+//objeto admin
+const admin = {
+    user:"root",
+    password:"root"
+};
 
-//qaunto tiver req no "/", returna um index.html
+//quando tiver requisição no "/", retorna um index.html de login
 app.get('/', (req, res) => {
     console.log('GET\nNome: ' + req.query.name + ' \nPassword: ' + req.query.password);
     res.sendFile(path.join(__dirname + '/index.html'));
@@ -15,24 +20,29 @@ app.get('/', (req, res) => {
     
 });
 
+//decodificar os dados da requisição via POST
+app.use(myParser.urlencoded({extended : true}));
+//trata requisição POST na url /login
+app.post("/login", (req, res) => {
+    
+      if(req.body.login == admin.user && req.body.password == admin.password){
+        res.sendFile(path.join(__dirname + '/welcome.html'));  
+      }else{
+        res.sendFile(path.join(__dirname + '/index.html'));  
+      }
+      
+});
+
+//trata requisição via GET na url /login
 app.get('/login', (req, res) => {
 
-    // auth.find(req.query.name);
-    // auth.map('123456');
-
-    if (req.query.name === 'a' && req.query.password === 'a') {
+    if (req.query.login === admin.user && req.query.password === admin.password) {
         res.sendFile(path.join(__dirname + '/welcome.html'));
     } else {
         res.sendFile(path.join(__dirname + '/index.html'));
     }
 
 });
-
-app.post('/', (req, res) => {
-    console.log('POST\nNome: ' + req.query.name + ' \nPassword: ' +  req.query.password);
-    //return res.end('teste');
-});
-
 
 server.listen(3000);
 console.log('Rodando na porta 3000');
