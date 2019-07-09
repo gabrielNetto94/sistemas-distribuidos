@@ -7,18 +7,19 @@ const server = require('http').Server(app);
 
 //objeto admin
 const admin = {
-    user:"root",
-    password:"root"
+    user:"admin",
+    password:"admin"
 };
+
 
 //quando tiver requisição no "/", retorna um index.html de login
 app.get('/', (req, res) => {
     console.log('GET\nNome: ' + req.query.name + ' \nPassword: ' + req.query.password);
     res.sendFile(path.join(__dirname + '/index.html'));
-    //return res.json(req.query.name+'asdas'+req.query.password);
-    
+    //return res.json(req.query.name+'asdas'+req.query.password);    
 });
 
+//
 //decodificar os dados da requisição via POST
 app.use(myParser.urlencoded({extended : true}));
 //trata requisição POST na url /login
@@ -33,6 +34,7 @@ app.post("/login", (req, res) => {
       
 });
 
+
 //trata requisição via GET na url /login
 app.get('/login', (req, res) => {
 
@@ -43,6 +45,8 @@ app.get('/login', (req, res) => {
     }
 
 });
+
+
 
 server.listen(3000);
 console.log('Rodando na porta 3000');
